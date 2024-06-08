@@ -1,65 +1,70 @@
-import { useState } from 'react';
-import Sidebar from './components/Sidebar';
-import CreateProject from './components/CreateProject';
-import NoProjet from './components/NoProject';
-import List from './components/List';
-import ProjectTodo from './components/ProjectTodo';
+import { useRef, useState } from "react";
+import ProjectsSidebar from "./components/ProjectsSidebar";
+import NoProjectSelected from "./components/NoProjectSelected";
+import NewProject from "./components/NewProject";
 
 function App() {
-  const [newProject, setNewProject] = useState(false);
-  const [projectsList, setProjectsList] = useState([]);
-  const [viewProject, setViewProject] = useState(false);
+  const [projectsState, setProjectsState] = useState({
+    selectedProjectId: undefined,
+    projects: [],
+  });
 
-  function createProjectHandler() {
-    setNewProject((prev) => !prev);
+  const projectID = useRef(0);
+
+  function handleStartAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: null,
+      };
+    });
   }
 
-  function addProjectHandler(props) {
-    setProjectsList((prev) => [
-      ...prev,
-      {
-        title: props.target[2].value,
-        description: props.target[3].value,
-        due: props.target[4].value,
-      },
-    ]);
-    createProjectHandler();
+  function handleCancelAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+      };
+    });
   }
 
-  function projectView(idx) {
-    console.log(idx);
-    setViewProject(projectsList[idx]);
+  function handleAddProject(projectData) {
+    setProjectsState((prevState) => {
+      const newProject = {
+        id: projectID.current++,
+        ...projectData,
+      };
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: [...prevState.projects, newProject],
+      };
+    });
+  }
+
+  let content;
+  if (projectsState.selectedProjectId === null) {
+    content = (
+      <NewProject
+        onAdd={handleAddProject}
+        onCancelAddProject={handleCancelAddProject}
+      />
+    );
+  } else if (projectsState.selectedProjectId === undefined) {
+    content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
+  } else {
+    content = "";
   }
 
   return (
-    <>
-      <Sidebar clickHandler={createProjectHandler} lists={projectsList}>
-        {projectsList.map((el, idx) => (
-          <List
-            key={idx}
-            title={el.title}
-            index={idx}
-            projectView={projectView}
-          ></List>
-        ))}
-      </Sidebar>
-      {projectsList.length === 0 && !newProject ? (
-        <NoProjet clickHandler={createProjectHandler} />
-      ) : null}
-      {newProject ? (
-        <CreateProject
-          clickHandler={createProjectHandler}
-          submitHandler={addProjectHandler}
-        />
-      ) : null}
-      {viewProject && (
-        <ProjectTodo
-          title={viewProject.title}
-          date={viewProject.due}
-          description={viewProject.description}
-        />
-      )}
-    </>
+    <main className="h-screen my-8 flex gap-8">
+      <ProjectsSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+      />
+      {content}
+    </main>
   );
 }
 
