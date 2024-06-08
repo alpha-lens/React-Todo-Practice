@@ -10,9 +10,9 @@ const Input = forwardRef((props, ref) => {
         {props.text}
       </label>
       {props.isTextarea ? (
-        <textarea ref={ref} className={inputStyling} required />
+        <textarea ref={ref} className={inputStyling} />
       ) : (
-        <input ref={ref} type={props.type} className={inputStyling} required />
+        <input ref={ref} type={props.type} className={inputStyling} />
       )}
       <br />
     </p>
