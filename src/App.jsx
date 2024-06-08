@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import CreateProject from './components/CreateProject';
 import NoProjet from './components/NoProject';
@@ -9,6 +9,7 @@ function App() {
   const [newProject, setNewProject] = useState(false);
   const [projectsList, setProjectsList] = useState([]);
   const [viewProject, setViewProject] = useState(false);
+  const projectIndex = useRef(0);
 
   function createProjectHandler() {
     setNewProject((prev) => !prev);
@@ -18,6 +19,7 @@ function App() {
     setProjectsList((prev) => [
       ...prev,
       {
+        id: projectIndex.current++,
         title: props.target[2].value,
         description: props.target[3].value,
         due: props.target[4].value,
@@ -26,8 +28,12 @@ function App() {
     createProjectHandler();
   }
 
+  function deleteProjectHandler(id) {
+    setProjectsList(prev => prev.filter(project => project.id !== id));
+    setViewProject(null);
+  }
+
   function projectView(idx) {
-    console.log(idx);
     setViewProject(projectsList[idx]);
   }
 
@@ -54,9 +60,11 @@ function App() {
       ) : null}
       {viewProject && (
         <ProjectTodo
+          id={viewProject.id}
           title={viewProject.title}
           date={viewProject.due}
           description={viewProject.description}
+          deleteProjectHandler={deleteProjectHandler}
         />
       )}
     </>

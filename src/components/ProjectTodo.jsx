@@ -21,6 +21,7 @@ export default (props) => {
   return (
     <div className={style.div}>
       <section>
+        <button onClick={() => deleteProjectHandler(props.id)}>Delete</button>
         <h2>{props.title}</h2>
         <p>{props.date}</p>
         <p>{props.description}</p>
@@ -39,7 +40,7 @@ export default (props) => {
         </div>
         {tasks.map((task) => (
           <p key={task.id}>
-            {task.text}{' '}
+            {task.text}
             <button onClick={() => clearTask(task.id)}>clear</button>
           </p>
         ))}
