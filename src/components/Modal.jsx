@@ -1,10 +1,11 @@
-import { useRef, useImperativeHandle, forwardRef } from "react";
-
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
-import Button from "./Button";
 
-const Modal = forwardRef(({ children, buttonCaption, ...props }, ref) => {
+import Button from "./Button.jsx";
+
+const Modal = forwardRef(function Modal({ children, buttonCaption }, ref) {
   const dialog = useRef();
+
   useImperativeHandle(ref, () => {
     return {
       open() {
@@ -23,7 +24,7 @@ const Modal = forwardRef(({ children, buttonCaption, ...props }, ref) => {
         <Button>{buttonCaption}</Button>
       </form>
     </dialog>,
-    document.querySelector("#modal-root")
+    document.getElementById("modal-root")
   );
 });
 
