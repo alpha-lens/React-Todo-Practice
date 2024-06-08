@@ -1,0 +1,60 @@
+.section {
+  position: relative;
+  float: right;
+  width: 70%;
+  height: 100vh;
+}
+
+.form {
+  position: absolute;
+  width: 70%;
+  left: 40%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form label {
+  font-weight: bold;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: -100px;
+}
+
+.menu button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.save {
+  background-color: #29150c;
+  color: white;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  background-color: #d9d9d9;
+  padding: 5px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.form input:focus,
+.form textarea:focus {
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #000;
+  padding-bottom: 3px;
+}
+
+.description {
+  height: 64px;
+}
